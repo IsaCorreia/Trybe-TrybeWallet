@@ -1,4 +1,5 @@
 import React from 'react';
+import connect from 'react-redux/lib/connect/connect';
 import { Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
@@ -10,7 +11,6 @@ class Login extends React.Component {
   onInputChange = (event) => {
     const { value } = event.target;
     const MIN_PASSWORD_LENGTH = 6;
-    console.log();
     switch (event.target.type) {
     case 'email':
       this.setState({ email: value });
@@ -23,13 +23,13 @@ class Login extends React.Component {
       }
       break;
     default:
-      console.log('none');
-      break;
+      return null;
     }
   };
 
   handleSubmit = (event) => {
-    // const { email, password } = this.state;
+    const { email, password, sendUserInfo } = this.state;
+    sendUserInfo(email, password);
     this.setState({ loggedIn: true });
     event.preventDefault();
   }
@@ -72,4 +72,10 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => ({ user: state.user });
+
+const mapDispatchToProps = (dispatch) => ({
+  sendUserInfo: (email, password) => { dispatch(email, password); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
