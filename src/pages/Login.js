@@ -17,6 +17,7 @@ class Login extends React.Component {
     case 'email':
       this.setState({ email: value });
       break;
+
     case 'password':
       if (value.length >= MIN_PASSWORD_LENGTH) {
         this.setState({ isButtonDisabled: false, password: value });
@@ -24,6 +25,7 @@ class Login extends React.Component {
         this.setState({ isButtonDisabled: true });
       }
       break;
+
     default:
       return null;
     }
