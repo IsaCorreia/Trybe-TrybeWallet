@@ -1,5 +1,5 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
-const wallet = (state = { key: 'value' }, action) => {
+const wallet = (state = {}, action) => {
   switch (action.type) {
   case 'WALLET':
     return {

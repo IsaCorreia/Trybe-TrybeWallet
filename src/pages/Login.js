@@ -1,6 +1,8 @@
+import propTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { login } from '../actions';
 
 class Login extends React.Component {
   state = {
@@ -28,11 +30,12 @@ class Login extends React.Component {
   };
 
   handleSubmit = (event) => {
-    const { email, password, sendUserInfo } = this.state;
+    const { email, password } = this.state;
+    const { sendUserInfo } = this.props;
     sendUserInfo(email, password);
     this.setState({ loggedIn: true });
     event.preventDefault();
-  }
+  };
 
   render() {
     const { isButtonDisabled, loggedIn } = this.state;
@@ -40,7 +43,7 @@ class Login extends React.Component {
       <div>
         <h1>Trybe Wallet</h1>
         <h3>Login</h3>
-        <form onSubmit={ this.handleSubmit }>
+        <form>
           <label htmlFor="email-input">
             Email
             <input
@@ -62,7 +65,11 @@ class Login extends React.Component {
               required
             />
           </label>
-          <button type="submit" disabled={ isButtonDisabled }>
+          <button
+            type="button"
+            disabled={ isButtonDisabled }
+            onClick={ this.handleSubmit }
+          >
             Entrar
           </button>
         </form>
@@ -75,7 +82,13 @@ class Login extends React.Component {
 const mapStateToProps = (state) => ({ user: state.user });
 
 const mapDispatchToProps = (dispatch) => ({
-  sendUserInfo: (email, password) => { dispatch(email, password); },
+  sendUserInfo: (email, password) => {
+    dispatch(login(email, password));
+  },
 });
+
+Login.propTypes = {
+  sendUserInfo: propTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

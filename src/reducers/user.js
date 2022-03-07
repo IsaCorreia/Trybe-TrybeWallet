@@ -1,5 +1,5 @@
 // Esse reducer será responsável por tratar as informações da pessoa usuária
-const user = (state = { key: 'value' }, action) => {
+const user = (state = {}, action) => {
   switch (action.type) {
   case 'USER_INFO':
     return {
