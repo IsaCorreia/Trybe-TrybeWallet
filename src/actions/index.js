@@ -7,4 +7,7 @@ export const login = (email, password) => ({
   },
 });
 
-export const wallet = {};
+export const wallet = (item) => ({
+  type: 'WALLET',
+  payload: { id: 0, ...item },
+});

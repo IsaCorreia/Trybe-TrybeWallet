@@ -4,7 +4,7 @@ const user = (state = {}, action) => {
   case 'USER_INFO':
     return {
       ...state,
-      email: action.payload.email,
+      ...action.payload,
     };
   default: return state;
   }
