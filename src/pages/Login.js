@@ -11,38 +11,36 @@ class Login extends React.Component {
   };
 
   onInputChange = (event) => {
-    const { value } = event.target;
-    const MIN_PASSWORD_LENGTH = 6;
-    switch (event.target.type) {
-    case 'email':
-      this.setState({ email: value });
-      break;
-
-    case 'password':
-      if (value.length >= MIN_PASSWORD_LENGTH) {
-        this.setState({ isButtonDisabled: false, password: value });
-      } else {
-        this.setState({ isButtonDisabled: true });
-      }
-      break;
-
-    default:
-      return null;
-    }
+    const { type, value } = event.target;
+    this.setState({ [type]: value },
+      () => { this.buttonEnabler(); });
   };
 
-  handleSubmit = (event) => {
+  buttonEnabler = () => {
+    const { email, password } = this.state;
+    const MIN_PASSWORD_LENGTH = 6;
+    const isValidEmail = (/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(email);
+    // const isValidEmail = true;
+    // https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
+    if (isValidEmail && password && password.length >= MIN_PASSWORD_LENGTH) {
+      return this.setState({ isButtonDisabled: false });
+    }
+    return this.setState({ isButtonDisabled: true });
+  }
+
+  onClick = () => {
     const { email, password } = this.state;
     const { sendUserInfo } = this.props;
     sendUserInfo(email, password);
     this.setState({ loggedIn: true });
-    event.preventDefault();
   };
 
   render() {
     const { isButtonDisabled, loggedIn } = this.state;
     return (
       <div>
+        {loggedIn && <Redirect to="/carteira" />}
+
         <h1>Trybe Wallet</h1>
         <h3>Login</h3>
         <form>
@@ -53,7 +51,6 @@ class Login extends React.Component {
               id="email-input"
               type="email"
               onChange={ this.onInputChange }
-              required
             />
           </label>
           <label htmlFor="password-input">
@@ -62,20 +59,17 @@ class Login extends React.Component {
               data-testid="password-input"
               id="password-input"
               type="password"
-              minLength="6"
               onChange={ this.onInputChange }
-              required
             />
           </label>
           <button
             type="button"
             disabled={ isButtonDisabled }
-            onClick={ this.handleSubmit }
+            onClick={ this.onClick }
           >
             Entrar
           </button>
         </form>
-        {loggedIn && <Redirect to="/carteira" />}
       </div>
     );
   }
