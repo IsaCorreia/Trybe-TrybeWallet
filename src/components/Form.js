@@ -1,22 +1,32 @@
 import propTypes from 'prop-types';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { wallet } from '../actions';
+import { fetchRates, wallet } from '../actions';
 
 class Form extends Component {
-  handleClick = () => {};
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(fetchRates());
+  }
 
   handleSubmit = (event) => {
-    const { saveExpenses } = this.props;
+    const { saveExpense } = this.props;
     event.preventDefault();
     const { valor, description, currency, method, tag } = event.target;
     const expense = [valor, description, currency, method, tag]
-      .reduce((acc, element) => ({
-        ...acc,
+      .reduce((previous, element) => ({
+        ...previous,
         [element.name]: element.value,
       }), {});
-    saveExpenses(expense);
+    saveExpense(expense);
   };
+
+  currencyOptionGen = async () => {
+    const { currencies } = this.props;
+    console.log(currencies);
+    // const keys = Object.keys(currencies);
+    // console.log(keys);
+    return (<option>BRL</option>);
+  }
 
   render() {
     return (
@@ -48,7 +58,7 @@ class Form extends Component {
             id="currency-input"
             name="currency"
           >
-            <option value="BRL">BRL</option>
+            { this.currencyOptionGen }
           </select>
         </label>
         <label htmlFor="method-input">
@@ -66,12 +76,12 @@ class Form extends Component {
             <option value="alimentacao">Alimentação</option>
             <option value="lazer">Lazer</option>
             <option value="trabalho">Trabalho</option>
-            <option value="transportacao">Transportação</option>
+            <option value="transporte">Transporte</option>
             <option value="saude">Saúde</option>
           </select>
         </label>
 
-        <button type="submit" onClick={ this.handleClick }>
+        <button type="submit" onClick={ () => {} }>
           Adicionar despesa
         </button>
       </form>
@@ -79,16 +89,21 @@ class Form extends Component {
   }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  currencies: state.currencies,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-  saveExpenses: (expenses) => {
+  saveExpense: (expenses) => {
     dispatch(wallet(expenses));
   },
+  dispatch: (toDispatch) => dispatch(toDispatch),
 });
 
 Form.propTypes = {
-  saveExpenses: propTypes.func.isRequired,
+  saveExpense: propTypes.func.isRequired,
+  dispatch: propTypes.func.isRequired,
+  currencies: propTypes.shape({}).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
