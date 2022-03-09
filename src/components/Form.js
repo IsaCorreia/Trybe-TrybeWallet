@@ -1,5 +1,6 @@
 import propTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { fetchRates, wallet } from '../actions';
 
 class Form extends Component {
