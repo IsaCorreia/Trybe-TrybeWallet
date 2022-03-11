@@ -5,12 +5,12 @@ import { fetchRates, wallet } from '../actions';
 
 class Form extends Component {
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchRates());
+    const { getRates } = this.props;
+    getRates();
   }
 
   handleSubmit = (event) => {
-    const { saveExpense } = this.props;
+    const { saveExpense, currencies } = this.props;
     event.preventDefault();
     const { valor, description, currency, method, tag } = event.target;
     const expense = [valor, description, currency, method, tag]
@@ -18,11 +18,12 @@ class Form extends Component {
         ...previous,
         [element.name]: element.value,
       }), {});
-    saveExpense(expense);
+    saveExpense(expense, currencies);
   };
 
-  currencyOptionGen = async () => {
+  currencyOptionGen = () => {
     const { currencies } = this.props;
+
     console.log(currencies);
     // const keys = Object.keys(currencies);
     // console.log(keys);
@@ -59,7 +60,7 @@ class Form extends Component {
             id="currency-input"
             name="currency"
           >
-            { this.currencyOptionGen }
+            { this.currencyOptionGen() }
           </select>
         </label>
         <label htmlFor="method-input">
@@ -95,15 +96,13 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  saveExpense: (expenses) => {
-    dispatch(wallet(expenses));
-  },
-  dispatch: (toDispatch) => dispatch(toDispatch),
+  saveExpense: (expenses, currencies) => dispatch(wallet(expenses, currencies)),
+  getRates: () => dispatch(fetchRates()),
 });
 
 Form.propTypes = {
   saveExpense: propTypes.func.isRequired,
-  dispatch: propTypes.func.isRequired,
+  getRates: propTypes.func.isRequired,
   currencies: propTypes.shape({}).isRequired,
 };
 
