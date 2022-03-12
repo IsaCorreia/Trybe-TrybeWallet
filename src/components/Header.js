@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 class Header extends Component {
   state = {
     sumValue: () => {
+      // Descobrir como fazer default value para sumValue
       const { expenses } = this.props;
       if (expenses.length >= 1) {
         const summedValue = expenses
