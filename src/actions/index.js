@@ -17,7 +17,7 @@ export const receiveRates = (rates) => ({
   type: 'RECEIVE_RATES',
   payload: rates,
 });
-export const fetchRates = () => async (dispatch) => {
+export const fetchRates = () => (dispatch) => {
   dispatch(requestRates());
 
   // tentei assim:
@@ -26,7 +26,8 @@ export const fetchRates = () => async (dispatch) => {
     .then((rates) => {
       dispatch(receiveRates(rates));
       return rates;
-    }).catch((error) => { console.log(error); });
+    });
+  // .catch((error) => { console.log(error); });
 
   // E assim:
   // try {
