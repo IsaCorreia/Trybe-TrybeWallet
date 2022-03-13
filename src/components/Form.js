@@ -50,7 +50,11 @@ class Form extends Component {
     const currencies = Object.keys(rates);
     return currencies
       .filter((currency) => currency !== 'USDT')
-      .map((currency, index) => (<option key={ index }>{currency}</option>));
+      .map((currency, index) => (
+        <option data-testid={ currency } key={ index }>
+          {currency}
+        </option>
+      ));
   };
 
   onInputChange = ({ target }) => {
@@ -59,7 +63,10 @@ class Form extends Component {
   };
 
   render() {
-    const { rates, expense: { value, description } } = this.state;
+    const {
+      rates,
+      expense: { value, description },
+    } = this.state;
     return (
       <form action="submit" onSubmit={ this.handleSubmit }>
         <label htmlFor="value">
