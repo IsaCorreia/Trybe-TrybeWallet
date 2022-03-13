@@ -48,9 +48,9 @@ class Form extends Component {
   currencyOptionGen = () => {
     const { rates } = this.state;
     const currencies = Object.keys(rates);
-    return currencies.map((currency, index) => (
-      <option key={ index }>{currency}</option>
-    ));
+    return currencies
+      .filter((currency) => currency !== 'USDT')
+      .map((currency, index) => (<option key={ index }>{currency}</option>));
   };
 
   onInputChange = ({ target }) => {
