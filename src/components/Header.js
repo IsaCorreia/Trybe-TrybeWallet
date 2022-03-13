@@ -17,6 +17,7 @@ class Header extends Component {
           .reduce((partialSum, curNumber) => partialSum + curNumber);
         return (summedValue);
       }
+      return '0';
     },
   };
 
